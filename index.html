@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Siswa - Sekolah Kami</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b5bdb;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --card: #ffffff;
+      --border: #e2e8f0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    .header {
+      background: var(--primary);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .logo i {
+      color: var(--accent);
+      font-size: 1.5rem;
+    }
+
+    .nav {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav a:hover {
+      color: var(--accent);
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: #fff;
+      padding: 90px 0;
+      text-align: center;
+    }
+
+    .hero-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+
+    .hero-content p {
+      max-width: 600px;
+      margin: 0 auto 28px;
+      opacity: 0.9;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: var(--primary);
+      padding: 12px 26px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
+    }
+
+    /* Profil Section */
+    .profil-section {
+      padding: 70px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-light);
+      margin-bottom: 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s, box-shadow 0.25s;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(30, 58, 138, 0.15);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      background: var(--border);
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .card-body h3 {
+      color: var(--primary);
+      font-size: 1.15rem;
+      margin-bottom: 4px;
+    }
+
+    .card-body .role {
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    .card-body .card-icon {
+      margin-top: 12px;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 760px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: muncul 0.3s ease;
+    }
+
+    @keyframes muncul {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 10;
+    }
+
+    .modal-close:hover {
+      background: #b91c1c;
+    }
+
+    .modal-body {
+      display: flex;
+      gap: 24px;
+      padding: 30px;
+    }
+
+    .modal-photo {
+      flex-shrink: 0;
+      width: 200px;
+      height: 200px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 4px solid var(--primary);
+    }
+
+    .modal-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-info {
+      flex: 1;
+    }
+
+    .modal-info h3 {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin-bottom: 2px;
+    }
+
+    .modal-role {
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+    }
+
+    .modal-bio {
+      color: var(--text);
+      font-size: 0.92rem;
+      margin-bottom: 18px;
+      text-align: justify;
+    }
+
+    .modal-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.88rem;
+      color: var(--text-light);
+    }
+
+    .modal-detail span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-detail i {
+      color: var(--primary);
+      width: 18px;
+    }
+
+    /* Tentang */
+    .tentang {
+      background: #fff;
+      padding: 60px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .tentang-inner {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .tentang-icon {
+      background: var(--primary);
+      color: var(--accent);
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .tentang h2 {
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .tentang p {
+      color: var(--text-light);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 22px 0;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero-content h1 {
+        font-size: 1.8rem;
+      }
+
+      .nav {
+        gap: 14px;
+      }
+
+      .nav a {
+        font-size: 0.85rem;
+      }
+
+      .modal-body {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 24px 18px;
+      }
+
+      .modal-photo {
+        width: 150px;
+        height: 150px;
+      }
+
+      .modal-bio {
+        text-align: left;
+      }
+
+      .modal-detail span {
+        justify-content: center;
+      }
+
+      .tentang-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="logo">
+        <i class="fa-solid fa-school"></i>
+        <span>Sekolah Kami</span>
+      </div>
+      <nav class="nav">
+        <a href="#home">Beranda</a>
+        <a href="#profil">Profil Siswa</a>
+        <a href="#tentang">Tentang</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="container hero-content">
+      <h1>Profil Siswa Kelas XII</h1>
+      <p>Kenali lebih dekat teman-teman sekelas kami. Setiap siswa memiliki cerita, minat, dan keunikan tersendiri.</p>
+      <a href="#profil" class="btn">
+        <i class="fa-solid fa-users"></i> Lihat Profil
+      </a>
+    </div>
+  </section>
+
+  <!-- Profil Siswa -->
+  <section class="profil-section" id="profil">
+    <div class="container">
+      <h2 class="section-title">Daftar Siswa</h2>
+      <p class="section-subtitle">Klik pada kartu untuk melihat biografi lengkap</p>
+      <div class="grid" id="studentGrid"></div>
+    </div>
+  </section>
+
+  <!-- Modal Biografi -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="modal-body">
+        <div class="modal-photo">
+          <img id="modalImg" src="" alt="Foto Profil">
+        </div>
+        <div class="modal-info">
+          <h3 id="modalName"></h3>
+          <p class="modal-role" id="modalRole"></p>
+          <div class="modal-bio" id="modalBio"></div>
+          <div class="modal-detail" id="modalDetail"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tentang -->
+  <section class="tentang" id="tentang">
+    <div class="container tentang-inner">
+      <div class="tentang-icon">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div>
+        <h2>Tentang Kelas Kami</h2>
+        <p>Kami adalah siswa kelas XII yang bersemangat dalam belajar dan berkarya. Website ini dibuat sebagai media perkenalan antar siswa serta dokumentasi kelas kami.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Sekolah Kami. Dibuat untuk keperluan pembelajaran.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Data siswa
+    const students = [
+      {
+        nama: "Azura",
+        peran: "The Dreamer",
+        foto: "azura.jpeg",
+        bio: "Azura adalah seseorang yang sangat dalam dan imajinatif. Ia ada di luar konsep kemanusiaan, dimana kecantikannya setara Aphrodite, seimajinatif Poseidon, semisterius Hades, dan seberani Ares.",
+        hobi: "Membuat puisi, memelihara bunga",
+        citaCita: "Di luar konsep kemanusiaan"
+      },
+      {
+        nama: "Dika",
+        peran: "The Dragon",
+        foto: "dika.jpeg",
+        bio: "Dika adalah penakluk naga, ia menjelajahi berbagai bioma untuk mengenali banyak spesies naga tertentu.",
+        hobi: "Menaklukan naga",
+        citaCita: "Menjelajahi seluruh bioma naga"
+      },
+      {
+        nama: "Sukma",
+        peran: "The Strategist",
+        foto: "sukma.jpeg",
+        bio: "Sukma adalah pembuat robot di era Uni Soviet yang berhasil menggapai keabadian. Ia telah menguji coba menanamkan kesadaran hewan pada robot ciptaannya.",
+        hobi: "Memodifikasi kehidupan",
+        citaCita: "Menggapai keabadian"
+      },
+      {
+        nama: "Niver",
+        peran: "The Designer",
+        foto: "niver.jpeg",
+        bio: "Niver adalah manusia bionik pada abad ke 50 yang terlempar ke abad 21 dengan hanya membawa barang bawaan berupa hologram.",
+        hobi: "Mengubah hologram menjadi tas Louis Vuitton",
+        citaCita: "Kembali ke abad ke 50"
+      },
+      {
+        nama: "Darren",
+        peran: "The Plenger",
+        foto: "darren.jpeg",
+        bio: "Darren adalah pengarang handal yang menciptakan website ini.",
+        hobi: "Ya ngoding, apa lagi",
+        citaCita: "Menjadi pengarang handal"
+      },
+      {
+        nama: "Iyan",
+        peran: "The Hacker",
+        foto: "iyan.jpeg",
+        bio: "Iyan adalah hacker misterius yang telah berhasil membobol BTC sehingga menggemparkan dunia, dikarenakan akun Satoshi Nakamoto terdeteksi aktif lagi.",
+        hobi: "Melakukan hacking skala masif",
+        citaCita: "Menggemparkan dunia"
+      }
+    ];
+
+    // Render kartu siswa
+    const grid = document.getElementById("studentGrid");
+
+    students.forEach((siswa, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img class="card-img" src="${siswa.foto}" alt="Foto ${siswa.nama}">
+        <div class="card-body">
+          <h3>${siswa.nama}</h3>
+          <p class="role">${siswa.peran}</p>
+          <div class="card-icon"><i class="fa-solid fa-address-card"></i></div>
+        </div>
+      `;
+      card.addEventListener("click", () => openModal(index));
+      grid.appendChild(card);
+    });
+
+    // Modal
+    const modal = document.getElementById("modal");
+    const modalClose = document.getElementById("modalClose");
+    const modalImg = document.getElementById("modalImg");
+    const modalName = document.getElementById("modalName");
+    const modalRole = document.getElementById("modalRole");
+    const modalBio = document.getElementById("modalBio");
+    const modalDetail = document.getElementById("modalDetail");
+
+    function openModal(index) {
+      const siswa = students[index];
+      modalImg.src = siswa.foto;
+      modalImg.alt = "Foto " + siswa.nama;
+      modalName.textContent = siswa.nama;
+      modalRole.textContent = siswa.peran;
+      modalBio.textContent = siswa.bio;
+      modalDetail.innerHTML = `
+        <span><i class="fa-solid fa-heart"></i> Hobi: ${siswa.hobi}</span>
+        <span><i class="fa-solid fa-bullseye"></i> Cita-cita: ${siswa.citaCita}</span>
+      `;
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+  </script>
+</body>
+</html>
